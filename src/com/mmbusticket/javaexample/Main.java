@@ -22,7 +22,22 @@ public class Main {
                 rectHeight);
     }
 
+    public static void drawOvalCenter(Graphics g, int panelWidth, int panelHeight, int rectWidth, int rectHeight) {
+        g.drawOval(
+                (panelWidth/2) - (rectWidth/2),
+                (panelHeight/2) - (rectHeight/2),
+                rectWidth,
+                rectHeight);
+    }
+
+    public static void drawBall(Ball ball, Graphics g) {
+        g.drawOval(ball.getX(), ball.getY(), ball.getRadius(), ball.getRadius());
+    }
+
     public static void createWindow() {
+        final double gravity = 1;
+        Ball ball1 = new Ball(PANEL_WIDTH/2, 2 * PANEL_HEIGHT/3, 50, 0.0, -30);
+        Ball ball2 = new Ball((PANEL_WIDTH/2) + 100, 2 * PANEL_HEIGHT/3, 40, 0.0, -35);
 
         JFrame frame = new JFrame("JFrame Example");
         final JPanel panel = new JPanel() {
@@ -35,22 +50,21 @@ public class Main {
 
                 g.setColor(Color.YELLOW);
 
-                for(int i=0; i<10; i++) {
-                    drawRectCenter(g, PANEL_WIDTH, PANEL_HEIGHT,
-                            i * (20+scale), i * (20+scale));
-                }
+                drawBall(ball1, g);
+                drawBall(ball2, g);
             }
         };
         frame.add(panel);
-        frame.setSize(800, 600);
+        frame.setSize(1200, 800);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
+
         TimerTask task = new TimerTask() {
             public void run() {
-                scale++;
-                System.out.println("Scale " + scale);
+                ball1.calculateNextStep(gravity);
+                ball2.calculateNextStep(gravity);
                 panel.repaint();
             }
         };
